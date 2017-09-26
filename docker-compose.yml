@@ -1,7 +1,7 @@
 version: '3'  
 services:  
   db:
-    image: postgres
+    build: ./db
     environment:
       POSTGRES_DB: dev
       POSTGRES_USER: postgres-dev
