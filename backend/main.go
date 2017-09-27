@@ -13,9 +13,9 @@ import (
 const (
 	host     = "db"
 	port     = 5432
-	user     = "postgres-dev"
-	password = "s3cr3tp4ssw0rd"
-	dbname   = "dev"
+	user     = "postgres"
+	password = "secret"
+	dbname   = "postgres"
 )
 
 func main() {
@@ -36,6 +36,17 @@ func main() {
 	}
 
 	fmt.Println("Successfully connected!")
+
+	sqlStatement := `  
+	INSERT INTO users (age, email, first_name, last_name)  
+	VALUES ($1, $2, $3, $4)  
+	RETURNING id`
+	id := 0
+	err = db.QueryRow(sqlStatement, 30, "jon@calhoun.io", "Jonathan", "Calhoun").Scan(&id)
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println("New record ID is:", id)
 
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, "Hello from Docker")

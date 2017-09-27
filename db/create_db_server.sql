@@ -1,7 +1,7 @@
-CREATE TABLE IF NOT EXISTS users (
-  id SERIAL, 
-  created TIMESTAMP, 
-  login TEXT, 
-  password TEXT, 
-  name TEXT, 
-  org INTEGER);
+CREATE TABLE users (  
+  id SERIAL PRIMARY KEY,
+  age INT,
+  first_name TEXT,
+  last_name TEXT,
+  email TEXT UNIQUE NOT NULL
+);
