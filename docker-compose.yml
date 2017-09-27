@@ -2,17 +2,17 @@ version: '3'
 services:  
   db:
     build: ./db
-    volumes:
-      - ./db/pgdata:/pgdata
+    # volumes:
+    #   - ./db/pgdata:/pgdata
     environment:
-      POSTGRES_DB: dev
-      POSTGRES_USER: postgres-dev
-      POSTGRES_PASSWORD: s3cr3tp4ssw0rd
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: secret
     ports:
       - 5432:5432
   app:
     build: ./backend
-    command: ["go", "run", "main.go"]
+    command: ["./wait-for-it.sh", "db:5432", "--", "go", "run", "main.go"]
     volumes:
       - ./backend:/go/src/app
     ports:
