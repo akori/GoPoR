@@ -2,6 +2,8 @@ version: '3'
 services:  
   db:
     build: ./db
+    volumes:
+      - ./db/pgdata:/pgdata
     environment:
       POSTGRES_DB: dev
       POSTGRES_USER: postgres-dev
