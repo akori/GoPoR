@@ -42,7 +42,7 @@ func main() {
 	VALUES ($1, $2, $3, $4)  
 	RETURNING id`
 	id := 0
-	err = db.QueryRow(sqlStatement, 30, "jon@calhoun.io", "Jonathan", "Calhoun").Scan(&id)
+	err = db.QueryRow(sqlStatement, 30, "iv@akori.cl", "Ignacio", "Vergara").Scan(&id)
 	if err != nil {
 		panic(err)
 	}
