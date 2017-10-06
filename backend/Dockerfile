@@ -17,3 +17,5 @@ COPY . /go/src/app
 # RUN go get -v  
 
 RUN go build main.go structs.go
+
+ENV PORT 8080
