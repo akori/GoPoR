@@ -21,3 +21,8 @@ services:
       - db
     links:
       - db
+  frontend:
+    build: ./frontend
+    command: npm start
+    ports:
+      - "9000:3000"
