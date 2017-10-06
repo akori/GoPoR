@@ -1,4 +1,3 @@
-// main.go
 package main
 
 import (
@@ -6,7 +5,6 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"os"
 
 	"github.com/gin-gonic/gin"
 	_ "github.com/lib/pq"
@@ -50,7 +48,7 @@ func createPerson(c *gin.Context) {
 	var person Person
 	// check for errors
 	if c.BindJSON(&person) == nil {
-		p := newPerson(person.Name, person.Lastname, person.Email)
+		p := newPerson(person.Firstname, person.Lastname, person.Email)
 		var err = dbmap.Insert(&p)
 		checkErr(err, "Insert failed")
 		c.JSON(http.StatusCreated, p)
@@ -99,13 +97,13 @@ func main() {
 
 	v1 := r.Group("/api/v1")
 	{
-		todos := v1.Group("/people")
+		people := v1.Group("/people")
 		{
-			todos.GET("/", getPeople)
-			todos.POST("/", createPerson)
-			todos.PUT("/:id", updatePerson)
-			todos.DELETE("/:id", deletePerson)
-			todos.GET("/:id", getPerson)
+			people.GET("/", getPeople)
+			people.POST("/", createPerson)
+			people.PUT("/:id", updatePerson)
+			people.DELETE("/:id", deletePerson)
+			people.GET("/:id", getPerson)
 		}
 	}
 	r.Run(":3001")
@@ -113,14 +111,23 @@ func main() {
 
 func initDb() *gorp.DbMap {
 	dbinfo := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable",
-		host, port, user, password, dbname
-	)
+		host, port, user, password, dbname)
 
 	db, err := sql.Open("postgres", dbinfo)
 	checkErr(err, "sql.Open failed")
 
 	// construct a gorp DbMap
 	dbmap := &gorp.DbMap{Db: db, Dialect: gorp.PostgresDialect{}}
+
+	// add a table, setting the table name to 'posts' and
+	// specifying that the Id property is an auto incrementing PK
+	dbmap.AddTableWithName(Person{}, "people").SetKeys(true, "id")
+
+	// create the table. in a production system you'd generally
+	// use a migration tool, or create the tables via scripts
+	err = dbmap.CreateTablesIfNotExists()
+	checkErr(err, "Create tables failed")
+
 	return dbmap
 }
 
