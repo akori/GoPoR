@@ -24,11 +24,17 @@ class Contact extends React.Component {
     super(props);
     this.state = {
       firstname: null,
+      lastname: null,
+      email: null,
     };
   }
   render() {
     return (
-      <li>{this.props.firstname}</li>
+      <div>
+        <th>{this.state.firstname}</th>
+        <th>{this.state.lastname}</th>
+        <th>{this.state.email}</th>
+      </div>
     );
   }
 }
@@ -41,22 +47,30 @@ class ContactList extends React.Component {
     };
   }
 
-  renderContact(i) {
+  renderContact() {
+    const props = {firstname: 'Ben', lastname: 'Hector', email: 'test'};
     return (
-      <Contact firstname={i}
+      <tr>
+        <Contact {...props}
 
-      />
+        />
+      </tr>
     );
   }
 
   render() {
-    const status = 'Next player: X';
-
     return (
       <div>
-        <div className="contact-row">
-          {this.renderContact("Ignacio")}
-        </div>
+        <tr>
+          <div className="contact-header">
+            <th>Firstname</th>
+            <th>Lastname</th>
+            <th>eMail</th>
+          </div>
+          <div className="contact-row">
+            {this.renderContact()}
+          </div>
+        </tr>
       </div>
     );
   }
